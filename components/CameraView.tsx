@@ -17,19 +17,23 @@ export default function CameraView({ onTakePhoto, onEnd }: Props) {
 
     // 撮影したファイルを親に渡すメソッド
     const takePhoto = async () => {
-        if (!cameraRef.current) return;
+        if (!cameraRef.current) {
+            return;
+        }
         const photo = await cameraRef.current.takePhoto({ flash: 'off' });
         const fileName = 'instax_' + Date.now() + '.jpg';
         onTakePhoto(photo.path, fileName);
     };
 
-    if (!camera) return <Text>No camera</Text>;
+    if (!camera) {
+        return <Text>No camera</Text>;
+    }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.fullScreen}>
             <Camera
                 ref={cameraRef}
-                style={{ flex: 1 }}
+                style={styles.fullScreen}
                 device={camera}
                 isActive={true}
                 photo={true}
@@ -47,6 +51,9 @@ export default function CameraView({ onTakePhoto, onEnd }: Props) {
 }
 
 const styles = StyleSheet.create({
+    fullScreen: {
+        flex: 1,
+    },
     controls: {
         position: 'absolute',
         bottom: 50,
