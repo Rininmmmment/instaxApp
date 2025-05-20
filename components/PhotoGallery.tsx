@@ -1,52 +1,32 @@
+/**
+ * 保存した写真の一覧を表示
+ */
+
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, FlatList, Image } from 'react-native';
+import { FlatList, Image, Text, View } from 'react-native';
+import type { PhotoInfo } from '../types';
 
-type PhotoGalleryProps = {
-    photos: string[];                // 画像URIの配列
-    onStartCamera: () => void;      // カメラ起動のコールバック
-  };
+type Props = {
+    photos: PhotoInfo[];
+};
 
-export default function PhotoGallery({ photos, onStartCamera }: PhotoGalleryProps) {
-  return (
-    <View style={styles.center}>
-      <FlatList
-        data={photos}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <Image source={{ uri: item }} style={styles.image} />
-        )}
-      />
-      <TouchableOpacity style={styles.button} onPress={onStartCamera}>
-        <Text style={styles.buttonText}>📷 カメラ起動</Text>
-      </TouchableOpacity>
-    </View>
-  );
+export default function PhotoGallery({ photos }: Props) {
+    return (
+        <View style={{ flex: 1 }}>
+        <FlatList
+            data={photos}
+            keyExtractor={(_, i) => i.toString()}
+            numColumns={2}
+            renderItem={({ item }) => (
+            <View style={{ margin: 5 }}>
+                <Image source={{ uri: item.uri }} style={{ width: 160, height: 200, borderRadius: 10 }} />
+                <Text>{item.liveName}</Text>
+                <Text>{new Date(item.date).toLocaleString()}</Text>
+            </View>
+            )}
+        />
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  list: {
-    padding: 10,
-  },
-  image: {
-    width: 160,
-    height: 200,
-    margin: 5,
-    borderRadius: 10,
-  },
-  button: {
-    backgroundColor: 'black',
-    padding: 15,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-  },
-});
+
